@@ -2,16 +2,16 @@ import styled from 'styled-components';
 
 const getBorderColor = props => {
   switch (props.level) {
-        case "beginner":
-            return "green";
-        case "intermediate":
-            return "orange";
-        case "advanced":
-            return "red";
-            default:
-            return null;
-    }  
-}
+    case 'beginner':
+      return props.theme.color.green;
+    case 'intermediate':
+      return props.theme.color.orange;
+    case 'advanced':
+      return props.theme.color.red;
+    default:
+      return null;
+  }
+};
 export const Wrapper = styled.div`
   padding: 8px;
   border: 10px solid ${getBorderColor};
