@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from 'components/App';
 import { ThemeProvider } from 'styled-components';
-import { Basics } from 'Basics';
+// import { Basics } from 'Basics';
 
 const theme = {
   colors: {
@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <App />
-      <Basics />
+      {/* <Basics /> */}
     </ThemeProvider>
   </React.StrictMode>
 );
