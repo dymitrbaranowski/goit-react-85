@@ -1,13 +1,12 @@
 import styled from 'styled-components';
 
 export const List = styled.ul`
-    display: flex;
-    flex-wrap: wrap;
-    gap: ${props => props.theme.spacing(3)};
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 `;
 
 export const ListItem = styled.li`
-    width: 300Px;
-    flex-grow: 1;
-   
+  width: 300px;
 `;
+//   flex-grow: 1;
