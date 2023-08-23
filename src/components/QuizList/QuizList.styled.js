@@ -3,10 +3,11 @@ import styled from 'styled-components';
 export const List = styled.ul`
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: ${props => props.theme.spacing(3)};
 `;
 
 export const ListItem = styled.li`
     width: 300Px;
+    flex-grow: 1;
    
 `;
