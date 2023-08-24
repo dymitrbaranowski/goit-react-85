@@ -14,13 +14,33 @@ export class App extends Component {
   };
 
   deleteQuiz = quizId => {
-    console.log(quizId);
+    this.setState(prevState => ({
+      quizItems: prevState.quizItems.filter(quiz => quiz.id !== quizId),
+    }));
   };
+
+  changeLevelFilter = newLevel => {
+    this.setState({
+      levelFilter: newLevel,
+    });
+  };
+
+  changeTopicFilter = newTopic => {
+    this.setState({
+      topicFilter: newTopic,
+    });
+  };
+
   render() {
     return (
       <Layout>
         <QuizForm />
-        <SearchBar />
+        <SearchBar
+          level={this.state.levelFilter}
+          topic={this.state.topicFilter}
+          onChangeLevel={this.changeLevelFilter}
+          onChangeTopic={this.changeTopicFilter}
+        />
         <QuizList items={this.state.quizItems} onDelete={this.deleteQuiz} />
         <GlobalStyle />
       </Layout>
