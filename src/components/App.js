@@ -1,16 +1,31 @@
-import { QuizForm } from './QuizForm';
+import { QuizForm } from './QuizForm/QuizForm';
 import { QuizList } from './QuizList/QuizList';
 import { SearchBar } from './SearchBar';
 import initialQuizItems from '../quiz-items.json';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
     quizItems: initialQuizItems,
-    topicFilter: '',
-    levelFilter: 'beginner',
+    filters: {
+      topic: '',
+      level: 'all',
+    },
+  };
+
+  addQuiz = newQuiz => {
+    this.setState(prevState => ({
+      quizItems: [
+        ...prevState.quizItems,
+        {
+          id: nanoid(),
+          ...newQuiz,
+        },
+      ],
+    }));
   };
 
   deleteQuiz = quizId => {
@@ -20,28 +35,52 @@ export class App extends Component {
   };
 
   changeLevelFilter = newLevel => {
-    this.setState({
-      levelFilter: newLevel,
-    });
+    this.setState(prevState => ({
+      filters: {
+        ...prevState.filters,
+        level: newLevel,
+      },
+    }));
   };
 
   changeTopicFilter = newTopic => {
-    this.setState({
-      topicFilter: newTopic,
+    this.setState(prevState => ({
+      filters: {
+        ...prevState.filters,
+        topic: newTopic,
+      },
+    }));
+  };
+
+  getVisibleQuizItems = () => {
+    const { quizItems, filters } = this.state;
+
+    return quizItems.filter(quiz => {
+      const hasTopic = quiz.topic
+        .toLowerCase()
+        .includes(filters.topic.toLowerCase());
+
+      if (filters.level === 'all') {
+        return hasTopic;
+      }
+      return hasTopic && quiz.level === filters.level;
     });
   };
 
   render() {
+    const { filters } = this.state;
+    const visibleItems = this.getVisibleQuizItems();
+
     return (
       <Layout>
-        <QuizForm />
+        <QuizForm onAdd={this.addQuiz} />
         <SearchBar
-          level={this.state.levelFilter}
-          topic={this.state.topicFilter}
+          level={filters.level}
+          topic={filters.topic}
           onChangeLevel={this.changeLevelFilter}
           onChangeTopic={this.changeTopicFilter}
         />
-        <QuizList items={this.state.quizItems} onDelete={this.deleteQuiz} />
+        <QuizList items={visibleItems} onDelete={this.deleteQuiz} />
         <GlobalStyle />
       </Layout>
     );

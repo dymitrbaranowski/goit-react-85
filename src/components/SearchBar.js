@@ -15,9 +15,10 @@ export const SearchBar = ({ level, topic, onChangeLevel, onChangeTopic }) => {
           onChangeLevel(evt.target.value);
         }}
       >
-        <option value="">Beginner</option>
-        <option value="">Intermediate</option>
-        <option value="">Advanced</option>
+        <option value="all">All</option>
+        <option value="beginer">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
       </select>
     </div>
   );
