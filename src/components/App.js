@@ -1,20 +1,46 @@
 import { QuizForm } from './QuizForm/QuizForm';
 import { QuizList } from './QuizList/QuizList';
 import { SearchBar } from './SearchBar';
-import initialQuizItems from '../quiz-items.json';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { fetchQuizzes } from './api';
 
 export class App extends Component {
   state = {
-    quizItems: initialQuizItems,
+    quizItems: [],
+    loading: false,
     filters: {
       topic: '',
       level: 'all',
     },
   };
+
+  async componentDidMount() {
+    const savedFilters = localStorage.getItem('quiz-filters');
+    if (savedFilters !== null) {
+      this.setState({
+        filters: JSON.parse(savedFilters),
+      });
+    }
+
+    try {
+      this.setState({ loading: true });
+      const quizzes = await fetchQuizzes();
+      this.setState({ quizItems: quizzes });
+    } catch (error) {
+      console.log('ERROR');
+    } finally {
+      this.setState({ loading: false });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.filters !== this.state.filters) {
+      localStorage.setItem('quiz-filters', JSON.stringify(this.state.filters));
+    }
+  }
 
   addQuiz = newQuiz => {
     this.setState(prevState => ({
@@ -68,7 +94,7 @@ export class App extends Component {
   };
 
   render() {
-    const { filters } = this.state;
+    const { filters, loading } = this.state;
     const visibleItems = this.getVisibleQuizItems();
 
     return (
@@ -80,6 +106,8 @@ export class App extends Component {
           onChangeLevel={this.changeLevelFilter}
           onChangeTopic={this.changeTopicFilter}
         />
+        {loading && <div>LOADING...</div>}
+        
         <QuizList items={visibleItems} onDelete={this.deleteQuiz} />
         <GlobalStyle />
       </Layout>
