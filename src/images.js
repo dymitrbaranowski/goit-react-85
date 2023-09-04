@@ -10,7 +10,7 @@ class App extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
     this.setState({
-      query: evt.target.elements.query.value,
+      query: `${Date.now()}/${evt.target.elements.query.value}`,
       images: [],
       page: 1,
     });

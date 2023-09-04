@@ -1,16 +1,18 @@
+import { Component } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import { QuizForm } from './QuizForm/QuizForm';
 import { QuizList } from './QuizList/QuizList';
 import { SearchBar } from './SearchBar';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
-import { Component } from 'react';
-import { nanoid } from 'nanoid';
-import { fetchQuizzes } from './api';
+
+import { createQuiz, deleteQuizById, fetchQuizzes } from './api';
 
 export class App extends Component {
   state = {
     quizItems: [],
     loading: false,
+    error: false,
     filters: {
       topic: '',
       level: 'all',
@@ -30,7 +32,7 @@ export class App extends Component {
       const quizzes = await fetchQuizzes();
       this.setState({ quizItems: quizzes });
     } catch (error) {
-      console.log('ERROR');
+      this.setState({ error: true });
     } finally {
       this.setState({ loading: false });
     }
@@ -42,22 +44,35 @@ export class App extends Component {
     }
   }
 
-  addQuiz = newQuiz => {
-    this.setState(prevState => ({
-      quizItems: [
-        ...prevState.quizItems,
-        {
-          id: nanoid(),
-          ...newQuiz,
-        },
-      ],
-    }));
+  addQuiz = async newQuiz => {
+    try {
+      this.setState({loading:true, error: false})
+      const addedQuiz = await createQuiz(newQuiz);
+      this.setState(prevState => ({
+        quizItems: [...prevState.quizItems, addedQuiz],
+      }));
+    } catch (error) {
+      this.setState({error: true})
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
-  deleteQuiz = quizId => {
-    this.setState(prevState => ({
-      quizItems: prevState.quizItems.filter(quiz => quiz.id !== quizId),
-    }));
+  deleteQuiz = async quizId => {
+    try {
+      this.setState({ loading: true, error: false });
+      const deletedQuiz = await deleteQuizById(quizId);
+      this.setState(prevState => ({
+        quizItems: prevState.quizItems.filter(
+          quiz => quiz.id !== deletedQuiz.id
+        ),
+      }));
+      toast.success('ВСЕ ОЧЕНЬ ХОРОШО!');
+    } catch (error) {
+      this.setState({ error: true });
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   changeLevelFilter = newLevel => {
@@ -94,7 +109,7 @@ export class App extends Component {
   };
 
   render() {
-    const { filters, loading } = this.state;
+    const { filters, loading, error } = this.state;
     const visibleItems = this.getVisibleQuizItems();
 
     return (
@@ -107,9 +122,12 @@ export class App extends Component {
           onChangeTopic={this.changeTopicFilter}
         />
         {loading && <div>LOADING...</div>}
-        
-        <QuizList items={visibleItems} onDelete={this.deleteQuiz} />
+        {error && !loading && <div>OOPS! THERE WAS AN ERROR!</div>}
+        {visibleItems.length > 0 && (
+          <QuizList items={visibleItems} onDelete={this.deleteQuiz} />
+        )}
         <GlobalStyle />
+        <Toaster position="top-right" />
       </Layout>
     );
   }
