@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Link, Routes, Route } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { QuizForm } from './QuizForm/QuizForm';
 import { QuizList } from './QuizList/QuizList';
@@ -7,26 +7,28 @@ import { SearchBar } from './SearchBar';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout';
 import { createQuiz, deleteQuizById, fetchQuizzes } from './api';
+import QuizzesPage from 'pages/QuizzesPage';
 
 export const App = () => {
   return (
     <div>
       <ul>
         <li>
-          <link to="/create">Create quiz</link>
+          <Link to="/create">Create quiz</Link>
         </li>
         <li>
-          <link to="/quizes">Quiz List</link>
+          <Link to="/quizes">Quiz List</Link>
         </li>
       </ul>
       <Routes>
         <Route path="/create" element={<div>Create quiz Page</div>} />
-        <Route path="/quizes" element={<div>Quizes Page</div>} />
+        <Route path="/quizes" element={<QuizzesPage />} />
         <Route path="/quizes/:quizId" element={<div>Single quize Page</div>} />
       </Routes>
+      <GlobalStyle />
+      <Toaster position="top-right" />
     </div>
   );
-  
 };
 
 const getIntialFilters = () => {
