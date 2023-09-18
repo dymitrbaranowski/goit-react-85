@@ -20,7 +20,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter basename="/goit-react-85">
       <ThemeProvider theme={theme}>
         <App />
-        {/* <Basics /> */}
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
