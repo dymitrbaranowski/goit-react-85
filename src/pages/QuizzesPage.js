@@ -96,12 +96,7 @@ export default function QuizzesPage() {
 
   return (
     <div>
-      <SearchBar
-        // level={filters.level}
-        // topic={filters.topic}
-        onChange={changeFilters}
-        onReset={resetFilters}
-      />
+      <SearchBar />
       {loading && <div>LOADING...</div>}
       {error && !loading && <div>OOPS! THERE WAS AN ERROR!</div>}
       {quizItems.length > 0 && (
