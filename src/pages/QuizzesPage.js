@@ -5,29 +5,16 @@ import { QuizList } from '../components/QuizList/QuizList';
 import { SearchBar } from '../components/SearchBar';
 import { deleteQuizById, fetchQuizzes } from '../components/api';
 import { useSearchParams } from 'react-router-dom';
-
-// const getIntialFilters = () => {
-//   const savedFilters = localStorage.getItem('quiz-filters');
-//   if (savedFilters !== null) {
-//     return JSON.parse(savedFilters);
-//   }
-//   return {
-//     topic: '',
-//     level: 'all',
-//   };
-// };
+import { useQueryParams } from 'hooks/UseQueryParams';
 
 export default function QuizzesPage() {
   const [quizItems, setQuizItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // console.log(searchParams.get('b'));
-  // const [filters, setFilters] = useState({
-  //   topic: '',
-  //   level: 'all',
-  // });
+  const { topic, level }useQueryParams();
+
+
 
   // HTTP запрос за всеми квизами
   useEffect(() => {
@@ -47,11 +34,6 @@ export default function QuizzesPage() {
     getQuizzes();
   }, []);
 
-  // // Пишем фильтры в LS
-  // useEffect(() => {
-  //   localStorage.setItem('quiz-filters', JSON.stringify(filters));
-  // }, [filters]);
-
   const deleteQuiz = async quizId => {
     try {
       setLoading(true);
@@ -68,39 +50,22 @@ export default function QuizzesPage() {
     }
   };
 
-  const changeFilters = (value, key) => {
-    // setSearchParams({ a: 20 });
-    //  setFilters(prevFilters => ({
-    //    ...prevFilters,
-    //    [key]: value,
-    //  }));
-  };
+  const visibleItems = quizItems.filter(quiz => {
+    const hasTopic = quiz.topic.toLowerCase().includes(topic.toLowerCase());
 
-  const resetFilters = () => {
-    // setFilters({
-    //   topic: '',
-    //   level: 'all',
-    // });
-  };
-
-  // const visibleItems = quizItems.filter(quiz => {
-  //   const hasTopic = quiz.topic
-  //     .toLowerCase()
-  //     .includes(filters.topic.toLowerCase());
-
-  //   if (filters.level === 'all') {
-  //     return hasTopic;
-  //   }
-  //   return hasTopic && quiz.level === filters.level;
-  // });
+    if (level === 'all') {
+      return hasTopic;
+    }
+    return hasTopic && quiz.level === level;
+  });
 
   return (
     <div>
       <SearchBar />
       {loading && <div>LOADING...</div>}
       {error && !loading && <div>OOPS! THERE WAS AN ERROR!</div>}
-      {quizItems.length > 0 && (
-        <QuizList items={quizItems} onDelete={deleteQuiz} />
+      {visibleItems.length > 0 && (
+        <QuizList items={visibleItems} onDelete={deleteQuiz} />
       )}
     </div>
   );
