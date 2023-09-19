@@ -1,4 +1,8 @@
+import { useSearchParams } from 'react-router-dom';
+
 export const SearchBar = ({ level, topic, onChangeLevel, onChangeTopic }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
   return (
     <div>
       <input

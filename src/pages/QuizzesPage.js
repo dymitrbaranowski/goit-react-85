@@ -22,8 +22,8 @@ export default function QuizzesPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams.get('b'));
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // console.log(searchParams.get('b'));
   // const [filters, setFilters] = useState({
   //   topic: '',
   //   level: 'all',
@@ -69,7 +69,7 @@ export default function QuizzesPage() {
   };
 
   const changeFilters = (value, key) => {
-    setSearchParams({ a: 20 });
+    // setSearchParams({ a: 20 });
     //  setFilters(prevFilters => ({
     //    ...prevFilters,
     //    [key]: value,
