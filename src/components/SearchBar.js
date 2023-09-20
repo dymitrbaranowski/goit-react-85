@@ -1,16 +1,10 @@
-import { useSearchParams } from 'react-router-dom';
-import { TopicFilter } from './TopicFilter';
 import { LevelFilter } from './LevelFilter';
+import { TopicFilter } from './TopicFilter';
+import { useQueryParams } from 'hooks/UseQueryParams';
+import { useQueryParams } from 'hooks/UseQueryParams';
 
 export const SearchBar = () => {
-  const [setSearchParams] = useSearchParams();
-
-  const resetFilters = () => {
-    setSearchParams({
-      topic: '',
-      level: 'all',
-    });
-  };
+  const { resetFilters } = useQueryParams();
 
   return (
     <div>
