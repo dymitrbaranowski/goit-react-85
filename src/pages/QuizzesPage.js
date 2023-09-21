@@ -12,7 +12,7 @@ export default function QuizzesPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const { topic, level }useQueryParams();
+  const { topic, level } = useQueryParams();
 
 
 
